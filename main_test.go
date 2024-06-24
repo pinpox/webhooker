@@ -9,7 +9,6 @@ import (
 func TestHookConfig_Run(t *testing.T) {
 	type fields struct {
 		Command string
-		Script  string
 		Token   string
 	}
 	type args struct {
@@ -20,13 +19,21 @@ func TestHookConfig_Run(t *testing.T) {
 		fields fields
 		args   args
 	}{
-		// TODO: Add test cases.
+		{
+			name:   "command",
+			fields: fields{Command: "echo hello", Token: "token"},
+			args:   args{hookName: "command"},
+		},
+		{
+			name:   "script",
+			fields: fields{Command: "./testdata/script.sh", Token: "token"},
+			args:   args{hookName: "script"},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			h := HookConfig{
 				Command: tt.fields.Command,
-				Script:  tt.fields.Script,
 				Token:   tt.fields.Token,
 			}
 			h.Run(tt.args.hookName)
@@ -35,33 +42,48 @@ func TestHookConfig_Run(t *testing.T) {
 }
 
 func TestHookConfig_Authorized(t *testing.T) {
+
 	type fields struct {
 		Command string
-		Script  string
 		Token   string
-	}
-	type args struct {
-		token string
 	}
 	tests := []struct {
 		name   string
 		fields fields
-		args   args
+		token  string
 		want   bool
 	}{
-		// TODO: Add test cases.
-		{name: "Authorized with specific token", want: true},
-		{name: "Authorized global token token", want: true},
-		{name: "Unauthorized", want: false},
+		{
+			name:   "Authorized with specific token",
+			want:   true,
+			token:  "token1",
+			fields: fields{Command: "echo hello", Token: "token1"},
+		},
+		{
+			name:   "Authorized global token token",
+			want:   true,
+			token:  "the-defaulttoken",
+			fields: fields{Command: "echo hello", Token: "token1"},
+		},
+		{
+			name:   "Unauthorized (no token)",
+			want:   false,
+			fields: fields{Command: "echo hello", Token: "token1"},
+		},
+		{
+			name:   "Unauthorized (wrong token)",
+			want:   false,
+			token:  "invalid",
+			fields: fields{Command: "echo hello", Token: "token1"},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			h := HookConfig{
 				Command: tt.fields.Command,
-				Script:  tt.fields.Script,
 				Token:   tt.fields.Token,
 			}
-			if got := h.Authorized(tt.args.token); got != tt.want {
+			if got := h.Authorized(tt.token); got != tt.want {
 				t.Errorf("HookConfig.Authorized() = %v, want %v", got, tt.want)
 			}
 		})
@@ -71,8 +93,8 @@ func TestHookConfig_Authorized(t *testing.T) {
 func TestParseConfig(t *testing.T) {
 
 	fullConfigExample := Config{
-		Host:        "the-host",
-		Port:        "the-port",
+		Host:        "127.0.0.1",
+		Port:        "9999",
 		GlobalToken: "the-defaulttoken",
 		Hooks: map[string]HookConfig{
 			"hook1": {
@@ -80,13 +102,10 @@ func TestParseConfig(t *testing.T) {
 				Token:   "token1",
 			},
 			"hook2": {
-				Token:  "token2",
-				Script: "script2",
+				Token: "token2",
 			},
 			"hook3": {
 				Command: "command3",
-				Script:  "script3",
-				Token:   "token3",
 			},
 		},
 	}
