@@ -62,12 +62,10 @@ func ParseConfig(path string) Config {
 
 var config Config
 
-func init() {
-	config = ParseConfig(os.Getenv("HOOKER_CONFIG"))
-}
-
 func main() {
 	router := gin.Default()
+
+	config = ParseConfig(os.Getenv("HOOKER_CONFIG"))
 
 	router.GET("/:hook", func(c *gin.Context) {
 

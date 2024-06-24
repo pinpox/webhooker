@@ -43,6 +43,8 @@ func TestHookConfig_Run(t *testing.T) {
 
 func TestHookConfig_Authorized(t *testing.T) {
 
+	config = Config{ GlobalToken: "the-globaltoken" }
+
 	type fields struct {
 		Command string
 		Token   string
@@ -62,7 +64,7 @@ func TestHookConfig_Authorized(t *testing.T) {
 		{
 			name:   "Authorized global token token",
 			want:   true,
-			token:  "the-defaulttoken",
+			token:  "the-globaltoken",
 			fields: fields{Command: "echo hello", Token: "token1"},
 		},
 		{
@@ -84,7 +86,7 @@ func TestHookConfig_Authorized(t *testing.T) {
 				Token:   tt.fields.Token,
 			}
 			if got := h.Authorized(tt.token); got != tt.want {
-				t.Errorf("HookConfig.Authorized() = %v, want %v", got, tt.want)
+				t.Errorf("HookConfig.Authorized() = %v, want %v.\nToken request: %v\nToken hook: %v\nToken global: %v", got, tt.want, tt.token, h.Token, config.GlobalToken)
 			}
 		})
 	}
