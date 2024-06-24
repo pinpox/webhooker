@@ -1,5 +1,5 @@
 {
-  description = "A low-friction status feed system";
+  description = "Listen for webhooks, run commands";
 
   # Nixpkgs / NixOS version to use.
   inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
@@ -25,31 +25,19 @@
     in
     {
 
-      # Provide some binary packages for selected system types.
       packages = forAllSystems (system:
         let
           pkgs = nixpkgsFor.${system};
         in
-        {
+        rec {
           webhooker = pkgs.buildGoModule {
             pname = "webhooker";
             inherit version;
-            # In 'nix develop', we don't need a copy of the source tree
-            # in the Nix store.
             src = ./.;
-
-            # This hash locks the dependencies of this package. It is
-            # necessary because of how Go requires network access to resolve
-            # VCS.  See https://www.tweag.io/blog/2021-03-04-gomod2nix/ for
-            # details. Normally one can build with a fake hash and rely on native Go
-            # mechanisms to tell you what the hash should be or determine what
-            # it should be "out-of-band" with other tooling (eg. gomod2nix).
-            # To begin with it is recommended to set this, but one must
-            # remember to bump this hash when your dependencies change.
-            vendorHash = pkgs.lib.fakeHash;
-
-            # vendorHash = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+            vendorHash = "sha256-eqkfWhlp++hR/x39/0GSqUKugUb9X13+qDCrm46tSj4=";
+            HOOKER_CONFIG = ./testdata/config.yaml;
           };
+          default = webhooker;
         });
 
       # Add dependencies that are only needed for development
@@ -62,10 +50,5 @@
             buildInputs = with pkgs; [ go gopls gotools go-tools gcc ];
           };
         });
-
-      # The default package for 'nix build'. This makes sense if the
-      # flake provides only one package or there is a clear "main"
-      # package.
-      defaultPackage = forAllSystems (system: self.packages.${system}.webhooker);
     };
 }
