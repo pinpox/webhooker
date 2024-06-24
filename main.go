@@ -56,6 +56,10 @@ func ParseConfig(path string) Config {
 		log.Fatal(err)
 	}
 
+	if c.GlobalToken == "" {
+		c.GlobalToken = os.Getenv("HOOKER_TOKEN")
+	}
+
 	return *c
 
 }
