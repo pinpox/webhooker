@@ -1,5 +1,8 @@
 # Webhooker
 
+Listens on a specified port for (authenticated) incoming webhooks or requests
+and runs a specified command.
+
 <p align="center">
   <a href="https://github.com/pinpox/webhooker/actions/workflows/go.yml">
       <img src="https://github.com/pinpox/webhooker/actions/workflows/go.yml/badge.svg" alt="Go Unit Tests" />
@@ -8,14 +11,11 @@
   <a href="https://github.com/pinpox/webhooker/actions/workflows/nix.yml">
       <img src="https://github.com/pinpox/webhooker/actions/workflows/nix.yml/badge.svg" alt="Nix Integration Tests" />
   </a>
+
+  <a href="https://buildbot.thalheim.io/#/projects/22">
+      <img src="https://img.shields.io/badge/Buildbot-Nix-blue?link=https%3A%2F%2Fbuildbot.thalheim.io%2F%23%2Fprojects%2F22" alt="Buildbot Nix" />
+  </a>
 </p>
-
-
-[![Unit Tests (Go)](https://github.com/pinpox/webhooker/actions/workflows/go.yml/badge.svg)](https://github.com/pinpox/webhooker/actions/workflows/go.yml)
-[![Integration Tests (Nix)](https://github.com/pinpox/webhooker/actions/workflows/nix.yml/badge.svg)](https://github.com/pinpox/webhooker/actions/workflows/nix.yml)
-
-Listens on a specified port for (authenticated) incoming webhooks or requests
-and runs a specified command.
 
 ## Configuration
 

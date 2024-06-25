@@ -1,4 +1,4 @@
-name: "Run Nix Tests"
+name: "Nix integration tests"
 on:
   pull_request:
   push:
