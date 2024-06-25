@@ -1,11 +1,11 @@
-Host: "127.0.0.1"
-Port: "9999"
-GlobalToken: "the-defaulttoken"
-Hooks:
+host: "127.0.0.1"
+port: "9999"
+globalToken: "the-defaulttoken"
+hooks:
   hook1:
-    Command: "command1"
-    Token: "token1"
+    command: "command1"
+    token: "token1"
   hook2:
-    Token: "token2"
+    token: "token2"
   hook3:
-    Command: "command3"
+    command: "command3"

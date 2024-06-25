@@ -13,15 +13,15 @@ import (
 )
 
 type Config struct {
-	Host        string                `yaml:"Host"`
-	Port        string                `yaml:"Port"`
-	GlobalToken string                `yaml:"GlobalToken"`
-	Hooks       map[string]HookConfig `yaml:"Hooks"`
+	Host        string                `yaml:"host"`
+	Port        string                `yaml:"port"`
+	GlobalToken string                `yaml:"globalToken"`
+	Hooks       map[string]HookConfig `yaml:"hooks"`
 }
 
 type HookConfig struct {
-	Command string `yaml:"Command"`
-	Token   string `yaml:"Token"`
+	Command string `yaml:"command"`
+	Token   string `yaml:"token"`
 }
 
 func (h HookConfig) Run(hookName string) {
