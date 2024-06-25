@@ -1,11 +1,13 @@
 package main
 
 import (
-	"gopkg.in/yaml.v3"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
+
+	"gopkg.in/yaml.v3"
 
 	"github.com/gin-gonic/gin"
 )
@@ -56,12 +58,22 @@ func ParseConfig(path string) Config {
 		log.Fatal(err)
 	}
 
+	// Get global token from env
 	if c.GlobalToken == "" {
 		c.GlobalToken = os.Getenv("HOOKER_TOKEN")
 	}
 
-	return *c
+	// Get specific tokens from env
+	for name, hook := range c.Hooks {
+		envToken := os.Getenv("HOOKER_TOKEN_" + strings.ToUpper(name))
+		if hook.Token == "" && envToken != "" {
+			h, _ := c.Hooks[name]
+			h.Token = envToken
+			c.Hooks[name] = h
+		}
+	}
 
+	return *c
 }
 
 var config Config

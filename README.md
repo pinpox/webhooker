@@ -35,7 +35,17 @@ With the configuration above:
 - `curl 127.0.0.1:9999/ping -H 'Token: the-defaulttoken'` would execute `ping -c 4 google.de`
 - `curl 127.0.0.1:9999/list -H 'Token: the-defaulttoken'` would execute `ls -l`
 
-The path to the configuration can be specified using the `HOOKER_CONFIG`
-environment variable. The `GlobalToken` can alternatively specified using the
-`HOOKER_TOKEN` environment variable.
 
+#### Environment Variables
+
+The path to the configuration should be specified using the `HOOKER_CONFIG`
+environment variable. 
+
+To avoid having tokens in the configuration, it is also possible to specify them
+via environment variables
+
+- The `GlobalToken` can be specified using the `HOOKER_TOKEN` environment variable.
+- Tokens for individual hooks will be searched in environment variables with the
+  same name and the `HOOKER_TOKEN_` prefix (`HOOKER_TOKEN_<name of the token in uppercase>`).
+  e.g.: for the last hook of the configuration example above the token would be
+  specified in `HOOKER_TOKEN_LIST`.
