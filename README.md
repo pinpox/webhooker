@@ -50,13 +50,38 @@ via environment variables
   specified in `HOOKER_TOKEN_LIST`.
 
 <!-- 
-## Use-Cases
-
-- rebuilding static blog
-- reibliding nixos host
-
-## NixOS Module
+## Use-Cases 
+TODO add examples, e.g.
+- building static blog
+- rebuilding nixos host
 -->
 
+## NixOS Module
 
+The `flake.nix` file includes a module for NixOS users. Import and use as shown
+below:
 
+```nix
+# Add to flake inputs
+inputs.webhooker.url = "github:pinpox/webhooker";
+
+# Import the module in your configuration.nix
+imports = [ self.inputs.webhooker.nixosModules.webhooker ];
+
+services.webhooker = {
+  enable = true;
+  envFile = "/path/to/your/envfile";
+  settings = {
+    host = "0.0.0.0";
+    port = "8888";
+    hooks = {
+      hello.command = "echo 'hello'";
+      world.command = "echo 'world'";
+    };
+  };
+};
+```
+
+For develoment the flake also provides NixOS tests. Use `nix flake check -v` to
+run them or `nix run .\#checks.x86_64-linux.vmTest.driverInteractive` for
+interactive testing and debugging.

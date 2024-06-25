@@ -49,55 +49,11 @@
       # Tests run by 'nix flake check' and by Hydra.
       checks = forAllSystems
         (system:
-          with nixpkgsFor.${system};
-
-          lib.optionalAttrs stdenv.isLinux {
-            # A VM test of the NixOS module.
-            vmTest = with import (nixpkgs + "/nixos/lib/testing-python.nix") { inherit system; };
-
-              (makeTest {
-                name = "webhooker-test";
-                nodes = {
-                  server =
-                    let
-                      configEnv = pkgs.writeTextFile {
-                        name = "envfile";
-                        text = ''
-                          HOOKER_TOKEN="global-testtoken"
-                        '';
-                      };
-                    in
-                    {
-                      imports = [ self.nixosModules.webhooker ];
-                      services.webhooker = {
-                        enable = true;
-                        envFile = "${configEnv}";
-                        settings = {
-                          host = "0.0.0.0";
-                          port = "8888";
-                          hooks = {
-                            hello.command = "echo 'hello'";
-                            world.command = "echo 'world'";
-                          };
-                        };
-                      };
-
-                      # Open firewall for testing
-                      networking.firewall.allowedTCPPorts = [ 8888 ];
-                    };
-                };
-
-                testScript = /*python*/ ''
-                  start_all()
-                  server.wait_for_unit("multi-user.target")
-                  server.wait_for_unit("webhooker.service")
-                  # machine.wait_for_open_port(8888)
-
-                  machine.succeed("curl http://localhost:8888/hello")
-                  machine.succeed("curl http://localhost:8888/world")
-                '';
-              }).test;
-          }
+          let
+            pkgs = nixpkgsFor.${system};
+            lib = pkgs.lib;
+          in
+          lib.optionalAttrs pkgs.stdenv.isLinux (import ./check.nix) { inherit system nixpkgs pkgs self lib; }
         );
 
       # Add dependencies that are only needed for development

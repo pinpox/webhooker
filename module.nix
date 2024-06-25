@@ -52,20 +52,11 @@ in
               options = {
                 command = mkOption {
                   type = types.str;
-                  description = ''
-                    Command to execute
-                  '';
+                  description = "Command to execute";
                 };
               };
             });
-            default = {
-              "hello" = {
-                command = "echo 'hello world'";
-              };
-            };
-            description = ''
-              TODO
-            '';
+            default = { };
           };
 
         };
