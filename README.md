@@ -1,5 +1,19 @@
 # Webhooker
 
+<p align="center">
+  <a href="https://github.com/pinpox/webhooker/actions/workflows/go.yml">
+      <img src="https://github.com/pinpox/webhooker/actions/workflows/go.yml/badge.svg" alt="Go Unit Tests" />
+  </a>
+
+  <a href="https://github.com/pinpox/webhooker/actions/workflows/nix.yml">
+      <img src="https://github.com/pinpox/webhooker/actions/workflows/nix.yml/badge.svg" alt="Nix Integration Tests" />
+  </a>
+</p>
+
+
+[![Unit Tests (Go)](https://github.com/pinpox/webhooker/actions/workflows/go.yml/badge.svg)](https://github.com/pinpox/webhooker/actions/workflows/go.yml)
+[![Integration Tests (Nix)](https://github.com/pinpox/webhooker/actions/workflows/nix.yml/badge.svg)](https://github.com/pinpox/webhooker/actions/workflows/nix.yml)
+
 Listens on a specified port for (authenticated) incoming webhooks or requests
 and runs a specified command.
 
